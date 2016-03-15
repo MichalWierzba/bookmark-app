@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-md-6">
+        <form>
+            <div class="form-group">
+                <label for="bookmark-url" class="control-label">Bookmark URL</label>
+                <input type="text" class="form-control" id="bookmark-url" placeholder="Enter bookmark URL"
+                       ng-model="bookmark.url">
+            </div>
+            <div class="form-group">
+                <label for="bookmark-title" class="control-label">Bookmark Title</label>
+                <input type="text" class="form-control" id="bookmark-title" placeholder="Enter bookmark title"
+                       ng-model="bookmark.title">
+            </div>
+            <div class="form-group">
+                <label for="bookmark-tags" class="control-label">Tags: (separated by commas)</label>
+                <input type="text" class="form-control" id="bookmark-tags" placeholder="Enter bookmark tags"
+                       ng-model="bookmark.tags">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" ng-click="saveBookmark()">Save</button>
+                <button type="button" class="btn btn-info" ng-click="clearForm()">Clear</button>
+                <a class="btn btn-default" ng-href="#/list">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

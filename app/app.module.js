@@ -1,6 +1,7 @@
 angular.module('gdansk-training', [
+    'ngRoute',
     'gt.components.hello-world',
-
+    'bookmarks-module',
     'gdanskTraining.templates',
     'gdanskTraining-constant',
     'package-version'
@@ -9,6 +10,17 @@ angular.module('gdansk-training', [
     $log.info('app version: ' + gdanskTrainingVersion);
 }).directive('gdanskTraining', function () {
     return { templateUrl: 'app/app.module.html' };
+}).config(function ($routeProvider) {
+    $routeProvider
+        .when('/list/:tag?', {
+            template: '<bookmarks-list></bookmarks-list>'
+        }).when('/edit/:id?', {
+            template: '<bookmark-form></bookmark-form>'
+        })
+        .otherwise({
+            redirectTo: '/list'
+        })
+    ;
 });
 
 angular.module('gdanskTraining.templates', []);

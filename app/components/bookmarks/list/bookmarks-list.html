@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-8">
+        <h2>Filtered by Tag: {{activeFilter || 'None'}} | <a ng-href="#/list">Clear Filter</a></h2>
+        <ul>
+            <li ng-repeat="bookmark in bookmarks | filter : activeFilter">
+                <a class="btn btn-xs btn-warning" ng-href="#/edit/{{$index}}">Edit</a>
+                <button type="button" class="btn btn-xs btn-danger" ng-click="deleteBookmark(bookmark)">Delete</button>
+                {{bookmark.title}}({{bookmark.url}}) | {{bookmark.tags.join()}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4>Bookmark's Tags</h4>
+        <ul>
+            <li ng-repeat="(tag, occurences) in tags">
+                <a ng-href="#/list/{{tag}}">{{tag}}({{occurences}})</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="form-group">
+        <a class="btn btn-primary" ng-href="#/edit">Add new</a>
+    </div>
+</div>
