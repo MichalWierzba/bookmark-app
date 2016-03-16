@@ -5,7 +5,7 @@
             <li ng-repeat="bookmark in bookmarks | filter : activeFilter">
                 <a class="btn btn-xs btn-warning" ng-href="#/edit/{{$index}}">Edit</a>
                 <button type="button" class="btn btn-xs btn-danger" ng-click="deleteBookmark(bookmark)">Delete</button>
-                {{bookmark.title}}({{bookmark.url}}) | {{bookmark.tags.join()}}
+                {{bookmark.title}}(<a href="{{bookmark.url}}" target="_blank">{{bookmark.url}}</a>) | {{bookmark.tags.join()}}
             </li>
         </ul>
     </div>
