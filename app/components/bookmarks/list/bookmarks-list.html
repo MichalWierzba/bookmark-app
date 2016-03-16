@@ -11,11 +11,7 @@
     </div>
     <div class="col-md-4">
         <h4>Bookmark's Tags</h4>
-        <ul>
-            <li ng-repeat="(tag, occurences) in tags">
-                <a ng-href="#/list/{{tag}}">{{tag}}({{occurences}})</a>
-            </li>
-        </ul>
+        <bookmarks-tags></bookmarks-tags>
     </div>
 </div>
 
