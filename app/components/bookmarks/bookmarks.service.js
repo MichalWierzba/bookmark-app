@@ -1,14 +1,18 @@
 angular.module('bookmarks-module')
-    .service('bookmarksService', function () {
-        this.bookmarks = [{
-            url: 'http://test.pl',
-            title: 'Test bookmark',
-            tags: ['abc', 'other', 'tag']
-        }, {
-            url: 'http://wp.pl',
-            title: 'Book Mark',
-            tags: ['other', 'tag', 'what']
-        }];
+    .service('bookmarksService', function ($window) {
+        var that = this;
+
+        this._storage = $window.localStorage;
+
+        this.bookmarks = angular.fromJson(this._storage.getItem('bookmarks')) || [{
+                url: 'http://test.pl',
+                title: 'Test bookmark',
+                tags: ['abc', 'other', 'tag']
+            }, {
+                url: 'http://wp.pl',
+                title: 'Book Mark',
+                tags: ['other', 'tag', 'what']
+            }];
 
         this._subscribers = {};
 
@@ -65,4 +69,9 @@ angular.module('bookmarks-module')
         };
 
         this.tags = this.retrieveTagsFromBookmarks();
+
+        this.subscribe('updated', function () {
+            // store bookmarks in localStorage
+            that._storage.setItem('bookmarks', angular.toJson(that.bookmarks));
+        });
     })
