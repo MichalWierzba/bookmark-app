@@ -1,10 +1,8 @@
 angular.module('bookmarks-module')
-    .service('bookmarksService', function ($window, pubsubService) {
+    .service('bookmarksService', function (localStorageService, pubsubService) {
         var that = this;
 
-        this._storage = $window.localStorage;
-
-        this.bookmarks = angular.fromJson(this._storage.getItem('bookmarks')) || [{
+        this.bookmarks = localStorageService.getItem('bookmarks') || [{
                 url: 'http://test.pl',
                 title: 'Test bookmark',
                 tags: ['abc', 'other', 'tag']
@@ -52,7 +50,7 @@ angular.module('bookmarks-module')
 
         pubsubService.subscribe('updated', function () {
             // store bookmarks in localStorage
-            that._storage.setItem('bookmarks', angular.toJson(that.bookmarks));
+            localStorageService.setItem('bookmarks', that.bookmarks);
 
             // refresh tags list
             that.refreshTags();
