@@ -1,5 +1,5 @@
 angular.module('bookmarks-module')
-    .service('bookmarksService', function ($window) {
+    .service('bookmarksService', function ($window, pubsubService) {
         var that = this;
 
         this._storage = $window.localStorage;
@@ -14,42 +14,25 @@ angular.module('bookmarks-module')
                 tags: ['other', 'tag', 'what']
             }];
 
-        this._subscribers = {};
-
-        this.subscribe = function (topic, callback) {
-            if (angular.isUndefined(this._subscribers[topic])) {
-                this._subscribers[topic] = [];
-            }
-            this._subscribers[topic].push(callback);
-        };
-
-        this.publish = function (topic) {
-            if (angular.isDefined(this._subscribers[topic])) {
-                this._subscribers[topic].forEach(function (callback) {
-                    callback();
-                });
-            }
-        };
-
         this.get = function (id) {
             return this.bookmarks[id];
         };
 
         this.add = function (bookmark) {
             this.bookmarks.push(bookmark);
-            this.publish('updated');
+            pubsubService.publish('updated');
         };
 
         this.update = function (id, bookmark) {
             this.bookmarks[id] = bookmark;
-            this.publish('updated');
+            pubsubService.publish('updated');
         };
 
         this.delete = function (bookmark) {
             this.bookmarks.splice(
                 this.bookmarks.indexOf(bookmark), 1
             );
-            this.publish('updated');
+            pubsubService.publish('updated');
         };
 
         this.retrieveTagsFromBookmarks = function () {
@@ -67,7 +50,7 @@ angular.module('bookmarks-module')
 
         this.tags = this.retrieveTagsFromBookmarks();
 
-        this.subscribe('updated', function () {
+        pubsubService.subscribe('updated', function () {
             // store bookmarks in localStorage
             that._storage.setItem('bookmarks', angular.toJson(that.bookmarks));
 
