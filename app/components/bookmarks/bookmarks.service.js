@@ -37,13 +37,11 @@ angular.module('bookmarks-module')
 
         this.add = function (bookmark) {
             this.bookmarks.push(bookmark);
-            this.refreshTags();
             this.publish('updated');
         };
 
         this.update = function (id, bookmark) {
             this.bookmarks[id] = bookmark;
-            this.refreshTags();
             this.publish('updated');
         };
 
@@ -51,7 +49,6 @@ angular.module('bookmarks-module')
             this.bookmarks.splice(
                 this.bookmarks.indexOf(bookmark), 1
             );
-            this.refreshTags();
             this.publish('updated');
         };
 
@@ -73,5 +70,8 @@ angular.module('bookmarks-module')
         this.subscribe('updated', function () {
             // store bookmarks in localStorage
             that._storage.setItem('bookmarks', angular.toJson(that.bookmarks));
+
+            // refresh tags list
+            that.refreshTags();
         });
     })
