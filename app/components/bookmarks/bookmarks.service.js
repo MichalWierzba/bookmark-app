@@ -10,6 +10,23 @@ angular.module('bookmarks-module')
             tags: ['other', 'tag', 'what']
         }];
 
+        this._subscribers = {};
+
+        this.subscribe = function (topic, callback) {
+            if (angular.isUndefined(this._subscribers[topic])) {
+                this._subscribers[topic] = [];
+            }
+            this._subscribers[topic].push(callback);
+        };
+
+        this.publish = function (topic) {
+            if (angular.isDefined(this._subscribers[topic])) {
+                this._subscribers[topic].forEach(function (callback) {
+                    callback();
+                });
+            }
+        };
+
         this.get = function (id) {
             return this.bookmarks[id];
         };
@@ -17,11 +34,13 @@ angular.module('bookmarks-module')
         this.add = function (bookmark) {
             this.bookmarks.push(bookmark);
             this.refreshTags();
+            this.publish('updated');
         };
 
         this.update = function (id, bookmark) {
             this.bookmarks[id] = bookmark;
             this.refreshTags();
+            this.publish('updated');
         };
 
         this.delete = function (bookmark) {
@@ -29,6 +48,7 @@ angular.module('bookmarks-module')
                 this.bookmarks.indexOf(bookmark), 1
             );
             this.refreshTags();
+            this.publish('updated');
         };
 
         this.retrieveTagsFromBookmarks = function () {
