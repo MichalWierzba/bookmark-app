@@ -42,7 +42,12 @@ angular.module('bookmarks-module').service('bookmarksService', function (localSt
     };
 
     this.refreshTags = function () {
-        this.tags = this.retrieveTagsFromBookmarks();
+        var that = this;
+        // remove object properties to keep object's reference
+        Object.keys(this.tags).forEach(function (key) {
+            delete that.tags[key];
+        });
+        angular.extend(this.tags, this.retrieveTagsFromBookmarks());
     };
 
     this.tags = this.retrieveTagsFromBookmarks();
