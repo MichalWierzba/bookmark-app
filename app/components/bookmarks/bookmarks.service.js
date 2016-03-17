@@ -1,4 +1,4 @@
-angular.module('bookmarks-module').service('bookmarksService', function (localStorageService, pubsubService) {
+angular.module('bookmarks-module').service('bookmarksService', function (localStorageService) {
     var that = this;
 
     this.bookmarks = localStorageService.getItem('bookmarks') || [{
@@ -17,19 +17,19 @@ angular.module('bookmarks-module').service('bookmarksService', function (localSt
 
     this.add = function (bookmark) {
         this.bookmarks.push(bookmark);
-        pubsubService.publish('updated');
+        this.onUpdate();
     };
 
     this.update = function (id, bookmark) {
         this.bookmarks[id] = bookmark;
-        pubsubService.publish('updated');
+        this.onUpdate();
     };
 
     this.delete = function (bookmark) {
         this.bookmarks.splice(
             this.bookmarks.indexOf(bookmark), 1
         );
-        pubsubService.publish('updated');
+        this.onUpdate();
     };
 
     this.retrieveTagsFromBookmarks = function () {
@@ -52,11 +52,11 @@ angular.module('bookmarks-module').service('bookmarksService', function (localSt
 
     this.tags = this.retrieveTagsFromBookmarks();
 
-    pubsubService.subscribe('updated', function () {
+    this.onUpdate = function () {
         // store bookmarks in localStorage
         localStorageService.setItem('bookmarks', that.bookmarks);
 
         // refresh tags list
         that.refreshTags();
-    });
+    }
 })
