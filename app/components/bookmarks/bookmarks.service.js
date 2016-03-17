@@ -1,7 +1,10 @@
-angular.module('bookmarks-module').service('bookmarksService', function (localStorageService) {
+angular.module('bookmarks-module').service('bookmarksService', function ($localStorage) {
     var that = this;
 
-    this.bookmarks = localStorageService.getItem('bookmarks') || [{
+    this.$storage = $localStorage;
+
+    if (!this.$storage.bookmarks) {
+        this.$storage.bookmarks = [{
             url: 'http://test.pl',
             title: 'Test bookmark',
             tags: ['abc', 'other', 'tag']
@@ -10,6 +13,9 @@ angular.module('bookmarks-module').service('bookmarksService', function (localSt
             title: 'Book Mark',
             tags: ['other', 'tag', 'what']
         }];
+    }
+
+    this.bookmarks = this.$storage.bookmarks;
 
     this.get = function (id) {
         return this.bookmarks[id];
@@ -53,10 +59,6 @@ angular.module('bookmarks-module').service('bookmarksService', function (localSt
     this.tags = this.retrieveTagsFromBookmarks();
 
     this.onUpdate = function () {
-        // store bookmarks in localStorage
-        localStorageService.setItem('bookmarks', that.bookmarks);
-
-        // refresh tags list
         that.refreshTags();
     }
 })

@@ -1,5 +1,6 @@
 angular.module('gdansk-training', [
     'ngRoute',
+    'ngStorage',
     'gt.components.hello-world',
     'bookmarks-module',
     'gdanskTraining.templates',
